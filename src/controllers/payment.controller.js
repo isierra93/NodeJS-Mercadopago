@@ -17,6 +17,12 @@ export const createOrder = async (req, res) => {
                             unit_price: donation
                         }
                     ],
+                    back_urls:{
+                        success:'http://localhost:3000/',
+                        failure:'http://localhost:3000/failure',
+                        pending:'http://localhost:3000/pending'
+                    },
+                    auto_return: 'approved'
                 }
             })
 
