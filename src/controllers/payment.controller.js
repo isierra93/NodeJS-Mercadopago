@@ -14,13 +14,13 @@ export const createOrder = async (req, res) => {
                         {
                             title: message,
                             quantity: 1,
-                            unit_price: donation
+                            unit_price: Number(donation)
                         }
                     ],
-                    back_urls:{
-                        success:'http://localhost:3000/',
-                        failure:'http://localhost:3000/failure',
-                        pending:'http://localhost:3000/pending'
+                    back_urls: {
+                        success: 'http://localhost:3000/donations',
+                        failure: 'http://localhost:3000/failure',
+                        pending: 'http://localhost:3000/pending'
                     },
                     auto_return: 'approved'
                 }
@@ -57,4 +57,18 @@ export const processOrder = async (req, res) => {
     }
 
     res.json({ suscess: true })
+}
+
+export const listenOrders = async (req, res) => {
+    const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SECRET)
+
+    try {
+        const { data } = await supabase
+            .from('payments')
+            .select()
+        res.render('table.ejs', { listDonations: data })
+    } catch (error) {
+        console.log('ERROR', error);
+        res.status(402)
+    }
 }
