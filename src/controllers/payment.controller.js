@@ -3,34 +3,40 @@ import { createClient } from "@supabase/supabase-js"
 
 export const createOrder = async (req, res) => {
     const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
-    const { body } = req
-    const { message, donation } = body
-    /* if (message && donation) go */
-    try {
-        const preference = await new Preference(client)
-            .create({
-                body: {
-                    items: [
-                        {
-                            title: message,
-                            quantity: 1,
-                            unit_price: Number(donation)
-                        }
-                    ],
-                    back_urls: {
-                        success: 'http://localhost:3000/donations',
-                        failure: 'http://localhost:3000/failure',
-                        pending: 'http://localhost:3000/pending'
-                    },
-                    auto_return: 'approved'
-                }
+    const { message, donation } = req.body
+    if (message && donation) {
+        try {
+            const preference = await new Preference(client)
+                .create({
+                    body: {
+                        items: [
+                            {
+                                title: message,
+                                quantity: 1,
+                                unit_price: Number(donation)
+                            }
+                        ],
+                        back_urls: {
+                            success: process.env.URL_DEPLOY + '/donations',
+                            failure: process.env.URL_DEPLOY + '/failure',
+                            pending: process.env.URL_DEPLOY + '/pending'
+                        },
+                        auto_return: 'approved'
+                    }
+                })
+            res.json({
+                id: preference.id
             })
+        } catch (error) {
+            console.log('ERROR', error)
+            res.status(402)
+        }
 
-        res.redirect(preference.sandbox_init_point)
-    } catch (error) {
-        console.log('ERROR', error)
-        res.status(402)
+        return
+
     }
+
+    res.json({ error: 'Message & Donation are required' })
 }
 
 export const processOrder = async (req, res) => {
