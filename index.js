@@ -2,10 +2,9 @@ import express from "express";
 import cors from "cors"
 import morgan from "morgan";
 import PaymentRoutes from "./src/routes/payment.routes.js";
-/* import { PORT } from "./config.js"; */
-import { config } from "dotenv";
-config()
-const PORT = process.env.PORT
+import { PORT } from "./config.js";
+/* import { config } from "dotenv";
+config() */
 
 const app = express()
 let corsOptions = { 
@@ -23,7 +22,6 @@ app.use(PaymentRoutes)
 app.get('/', function ( req, res){
     res.render('form.ejs')
 })
-
 
 app.listen(PORT, () => {
     console.log('Server iniciado en el PORT: ' + PORT)
