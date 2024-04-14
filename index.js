@@ -2,9 +2,10 @@ import express from "express";
 import cors from "cors"
 import morgan from "morgan";
 import PaymentRoutes from "./src/routes/payment.routes.js";
-import { PORT } from "./config.js";
 /* import { config } from "dotenv";
 config() */
+
+const PORT = process.env.PORT || 3000
 
 const app = express()
 let corsOptions = { 
