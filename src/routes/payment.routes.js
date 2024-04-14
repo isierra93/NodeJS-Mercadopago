@@ -1,13 +1,13 @@
 import { Router } from "express";
-import { createOrder, processOrder, listenOrders } from "../controllers/payment.controller.js"
+import { createOrder, processOrder, listenPayments } from "../controllers/payment.controller.js"
 
 const router = Router()
 
-router.post('/create-order', createOrder)
-router.post('/payment', processOrder)
-router.get('/donations', listenOrders)
+router.post('/api/create-order', createOrder)
+router.post('/api/payment', processOrder)
+router.get('/api/listPayments', listenPayments)
 
-router.get('/failure', (req, res) => res.send('Failure payment'))
-router.get('/pending', (req, res) => res.send('Pending payment'))
+router.get('/api/failure', (req, res) => res.json({error: 'Failure payment'}))
+router.get('/api/pending', (req, res) => res.json({error: 'Pending payment'}))
 
 export default router

@@ -3,23 +3,23 @@ import { createClient } from "@supabase/supabase-js"
 
 export const createOrder = async (req, res) => {
     const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
-    const { message, donation } = req.body
-    if (message && donation) {
+    const { titleProducts, totalPrice, url_redirect } = req.body
+    if (titleProducts && totalPrice && url_redirect) {
         try {
             const preference = await new Preference(client)
                 .create({
                     body: {
                         items: [
                             {
-                                title: message,
+                                title: titleProducts,
                                 quantity: 1,
-                                unit_price: Number(donation)
+                                unit_price: Number(totalPrice)
                             }
                         ],
                         back_urls: {
-                            success: process.env.URL_DEPLOY + '/donations',
-                            failure: process.env.URL_DEPLOY + '/failure',
-                            pending: process.env.URL_DEPLOY + '/pending'
+                            success: url_redirect,
+                            failure: process.env.URL_DEPLOY + '/api/failure',
+                            pending: process.env.URL_DEPLOY + '/api/pending'
                         },
                         auto_return: 'approved'
                     }
@@ -65,14 +65,14 @@ export const processOrder = async (req, res) => {
     res.json({ suscess: true })
 }
 
-export const listenOrders = async (req, res) => {
+export const listenPayments = async (req, res) => {
     const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SECRET)
 
     try {
         const { data } = await supabase
             .from('payments')
             .select()
-        res.json({ listDonations: data })
+        res.json({ listPayments: data })
     } catch (error) {
         console.log('ERROR', error);
         res.status(402)
