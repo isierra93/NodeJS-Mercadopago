@@ -5,6 +5,7 @@ import PaymentRoutes from "./src/routes/payment.routes.js";
 /* import { PORT } from "./config.js"; */
 import { config } from "dotenv";
 config()
+const PORT = process.env.PORT
 
 const app = express()
 let corsOptions = { 
@@ -23,7 +24,6 @@ app.get('/', function ( req, res){
     res.render('form.ejs')
 })
 
-const PORT = process.env.PORT
 
 app.listen(PORT, () => {
     console.log('Server iniciado en el PORT: ' + PORT)
