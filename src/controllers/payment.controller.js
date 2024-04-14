@@ -72,7 +72,7 @@ export const listenOrders = async (req, res) => {
         const { data } = await supabase
             .from('payments')
             .select()
-        res.render('table.ejs', { listDonations: data })
+        res.json({ listDonations: data })
     } catch (error) {
         console.log('ERROR', error);
         res.status(402)
