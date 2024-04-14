@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors"
 import morgan from "morgan";
 import PaymentRoutes from "./routes/payment.routes.js";
-import { PORT } from "./config.js";
+/* import { PORT } from "./config.js"; */
 import { config } from "dotenv";
 config()
 
@@ -22,6 +22,8 @@ app.use(PaymentRoutes)
 app.get('/', function ( req, res){
     res.render('form.ejs')
 })
+
+const PORT = process.env.PORT || 3000
 
 app.listen(PORT, () => {
     console.log('Server iniciado en el PORT: ' + PORT)
